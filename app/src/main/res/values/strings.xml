@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Food Served</string>
+    <string name="table_number">Table Number: </string>
+    <string name="on_completion">On Completion: </string>
+    <string name="not_delivered">Not Delivered</string>
+    <string name="delivered">Delivered</string>
+
+    <!-- Delete Later -->
+    <string name="food_title_example">Pizza</string>
+</resources>
