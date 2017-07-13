@@ -37,11 +37,15 @@ public class FoodServedAdapter extends RecyclerView.Adapter<FoodServedAdapter.Fo
     @Override
     public void onBindViewHolder(FoodViewHolder holder, int position) {
 
+
+
         FoodDescription tempFoodDescription = foodDescriptions.get(position);
+
+        int tableNumber = tempFoodDescription.getTableNumber();
 
         holder.foodTitleTextView.setText(tempFoodDescription.getFoodTitle());
 
-        holder.tableNumberTextView.setText(tempFoodDescription.getTableNumber());
+        holder.tableNumberTextView.setText(Integer.toString(tableNumber));
 
         determineOrderStatus(tempFoodDescription.getOnCompletion(), holder.completionStatusTextView);
 
