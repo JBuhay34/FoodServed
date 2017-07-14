@@ -4,6 +4,8 @@
     <string name="on_completion">On Completion: </string>
     <string name="not_delivered">Not Delivered</string>
     <string name="delivered">Delivered</string>
+    <string name="food_ordered">Food Ordered</string>
+    <string name="num">Table \#</string>
 
     <!-- Delete Later -->
     <string name="food_title_example">Pizza</string>
