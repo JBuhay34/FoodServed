@@ -15,7 +15,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddFoodActivity"></activity>
+        <activity
+            android:name=".AddFoodActivity"
+            android:parentActivityName=".MainActivity"></activity>
+
+        <provider
+            android:name=".data.FoodServedProvider"
+            android:authorities="com.example.justinbuhay.foodserved" />
     </application>
 
 </manifest>
