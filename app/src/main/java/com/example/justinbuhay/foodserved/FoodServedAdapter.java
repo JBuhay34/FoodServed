@@ -1,105 +1,86 @@
 package com.example.justinbuhay.foodserved;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.justinbuhay.foodserved.data.FoodContract;
 
 
 /**
  * Created by justinbuhay on 7/13/17.
  */
 
-public class FoodServedAdapter extends RecyclerView.Adapter<FoodServedAdapter.FoodViewHolder> {
+public class FoodServedAdapter extends CursorRecyclerViewAdapter {
 
-    private List<FoodDescription> foodDescriptions;
-
-    public FoodServedAdapter(ArrayList<FoodDescription> foodDescriptions){
-
-        this.foodDescriptions = foodDescriptions;
-
+    public FoodServedAdapter(Context context, Cursor cursor) {
+        super(context, cursor);
     }
 
     @Override
-    public FoodViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.food_card_item_view, parent, false);
-        FoodViewHolder tempViewHolder = new FoodViewHolder(v);
-        return tempViewHolder;
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 
     @Override
-    public void onBindViewHolder(FoodViewHolder holder, int position) {
-
-
-
-        FoodDescription tempFoodDescription = foodDescriptions.get(position);
-
-        int tableNumber = tempFoodDescription.getTableNumber();
-
-        holder.foodTitleTextView.setText(tempFoodDescription.getFoodTitle());
-
-        holder.tableNumberTextView.setText(Integer.toString(tableNumber));
-
-        determineOrderStatus(tempFoodDescription.getOnCompletion(), holder.completionStatusTextView);
-
-
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(mContext).inflate(R.layout.food_card_item_view, parent, false);
+        return new FoodViewHolder(v);
     }
 
-    private void determineOrderStatus(int orderStatus, TextView completionStatusTextView){
-
-        String orderString = null;
-
-        switch (orderStatus){
-            case 0:
-                orderString = completionStatusTextView.getResources().getString(R.string.not_delivered);
-                completionStatusTextView.setTextColor(completionStatusTextView.getResources().getColor(R.color.red));
-                break;
-            case 1:
-                orderString = completionStatusTextView.getResources().getString(R.string.delivered);
-                completionStatusTextView.setTextColor(completionStatusTextView.getResources().getColor(R.color.green));
-                break;
-
-        }
-        if(orderString == null){
-            throw new NullPointerException("The order string of completion textView is null.");
-        }
-        completionStatusTextView.setText(orderString);
-
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, Cursor cursor) {
+        FoodViewHolder holder = (FoodViewHolder) viewHolder;
+        cursor.moveToPosition(cursor.getPosition());
+        holder.setData(cursor);
     }
 
     @Override
     public int getItemCount() {
-        return foodDescriptions.size();
+        return super.getItemCount();
     }
 
-    public static class FoodViewHolder extends RecyclerView.ViewHolder{
+    @Override
+    public int getItemViewType(int position) {
+        return 0;
+    }
 
-        TextView foodTitleTextView;
-        TextView tableNumberTextView;
-        TextView completionStatusTextView;
+    public class FoodViewHolder extends RecyclerView.ViewHolder {
+
+        public TextView foodTitleTextView;
+        public TextView tableNumberTextView;
+        public TextView isServedTextView;
 
         public FoodViewHolder(View itemView) {
             super(itemView);
-
             foodTitleTextView = (TextView) itemView.findViewById(R.id.food_title_text_view);
             tableNumberTextView = (TextView) itemView.findViewById(R.id.table_exact_number_text_view);
-            completionStatusTextView  = (TextView) itemView.findViewById(R.id.completion_status_text_view);
-            
+            isServedTextView = (TextView) itemView.findViewById(R.id.on_completion_text_view);
+
         }
 
+        public void setData(Cursor c) {
+            foodTitleTextView.setText(c.getString(c.getColumnIndex(FoodContract.FoodEntry.COLUMNS_FOOD_TITLE)));
+            tableNumberTextView.setText(c.getInt(c.getColumnIndex(FoodContract.FoodEntry.COLUMNS_TABLE_NUMBER)) + "");
+            determineOrderStatus(c.getInt(c.getColumnIndex(FoodContract.FoodEntry.COLUMNS_SERVED_VERIFICATION)));
+        }
 
-
-
-
+        private void determineOrderStatus(int orderStatus) {
+            switch (orderStatus) {
+                case 0:
+                    isServedTextView.setText(mContext.getString(R.string.not_delivered));
+                    break;
+                case 1:
+                    isServedTextView.setText(mContext.getString(R.string.delivered));
+                    break;
+                default:
+                    throw new NullPointerException("Order Status is unavailable right now.");
+            }
+        }
 
     }
-
-
 }
