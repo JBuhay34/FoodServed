@@ -12,9 +12,12 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.example.justinbuhay.foodserved.data.FoodContract;
+
+import static android.R.attr.data;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         switch (id) {
             case 0:
-                return new CursorLoader(this, FoodContract.FoodEntry.CONTENT_URI, null, null, null, null);
+                return new CursorFoodLoader(this);
             default:
                 throw new IllegalArgumentException("Unable to create correct Loader");
         }
@@ -67,6 +70,11 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
         switch (loader.getId()) {
             case 0:
+
+                Log.e(getClass().getSimpleName(), "Cursor has " + data.getCount());
+                mAdapter.swapCursor(data);
+
+                /*
                 Cursor cursor = ((FoodServedAdapter) mRecyclerView.getAdapter()).getCursor();
 
                 MatrixCursor mx = new MatrixCursor(new String[]{FoodContract.FoodEntry._ID, FoodContract.FoodEntry.COLUMNS_FOOD_TITLE, FoodContract.FoodEntry.COLUMNS_TABLE_NUMBER, FoodContract.FoodEntry.COLUMNS_SERVED_VERIFICATION});
@@ -75,6 +83,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 fillMx(data, mx);
 
                 ((FoodServedAdapter) mRecyclerView.getAdapter()).swapCursor(mx);
+
+                */
 
 
                 break;
@@ -85,10 +95,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     }
 
+    /*
     private void fillMx(Cursor data, MatrixCursor mx) {
         if (data == null) {
             return;
         }
+
+
 
         data.moveToPosition(-1);
         while (data.moveToNext()) {
@@ -100,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             });
         }
     }
-
+           */
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
