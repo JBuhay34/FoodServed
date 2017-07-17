@@ -38,6 +38,7 @@ public class AddFoodActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -56,10 +57,10 @@ public class AddFoodActivity extends AppCompatActivity {
     private void addFood() {
 
         String foodTitle = mFoodTitleEditText.getText().toString();
-        Log.i(LOG_TAG, "foodTitle" + foodTitle);
+        Log.i(LOG_TAG, "foodTitle: " + foodTitle);
 
         int tableNumber = Integer.parseInt(mTableNumberEditText.getText().toString());
-        Log.i(LOG_TAG, "tableNumber" + tableNumber);
+        Log.i(LOG_TAG, "tableNumber: " + tableNumber);
 
         if ((!foodTitle.equals("")) || (foodTitle != null) || (!(tableNumber < 0))) {
 

@@ -42,6 +42,7 @@ public class FoodServedProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] columns, @Nullable String selections, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
+        Cursor c;
         columns = new String[]{FoodContract.FoodEntry._ID, FoodContract.FoodEntry.COLUMNS_FOOD_TITLE, FoodContract.FoodEntry.COLUMNS_TABLE_NUMBER, FoodContract.FoodEntry.COLUMNS_SERVED_VERIFICATION};
         SQLiteDatabase database = mDBHelper.getReadableDatabase();
         int result = sUriMatcher.match(uri);
@@ -49,7 +50,8 @@ public class FoodServedProvider extends ContentProvider {
 
             case FOODS:
 
-                return database.query(FoodContract.FoodEntry.TABLE_NAME, columns, selections, selectionArgs, null, null, null);
+                c = database.query(FoodContract.FoodEntry.TABLE_NAME, columns, selections, selectionArgs, null, null, null);
+                break;
 
             case FOODS_ID:
 
@@ -63,6 +65,7 @@ public class FoodServedProvider extends ContentProvider {
                 throw new NullPointerException(LOG_TAG + ": Invalid uri -" + uri);
 
         }
+        return c;
     }
 
     @Nullable
