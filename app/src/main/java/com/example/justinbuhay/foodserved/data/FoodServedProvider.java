@@ -65,6 +65,8 @@ public class FoodServedProvider extends ContentProvider {
                 throw new NullPointerException(LOG_TAG + ": Invalid uri -" + uri);
 
         }
+
+        c.setNotificationUri(getContext().getContentResolver(), FoodContract.FoodEntry.CONTENT_URI);
         return c;
     }
 
@@ -88,7 +90,11 @@ public class FoodServedProvider extends ContentProvider {
             return null;
         }
 
-        return Uri.parse(FoodContract.FoodEntry.CONTENT_URI + "/" + rowId);
+
+        Uri newUri = Uri.parse(FoodContract.FoodEntry.CONTENT_URI + "/" + rowId);
+        // Delete if doesnt work.
+        getContext().getContentResolver().notifyChange(FoodContract.FoodEntry.CONTENT_URI, null);
+        return newUri;
     }
 
     @Override

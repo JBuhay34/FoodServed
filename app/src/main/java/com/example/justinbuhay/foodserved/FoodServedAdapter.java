@@ -65,7 +65,7 @@ public class FoodServedAdapter extends RecyclerView.Adapter<FoodServedAdapter.Fo
             super(itemView);
             foodTitleTextView = (TextView) itemView.findViewById(R.id.food_title_text_view);
             tableNumberTextView = (TextView) itemView.findViewById(R.id.table_exact_number_text_view);
-            isServedTextView = (TextView) itemView.findViewById(R.id.on_completion_text_view);
+            isServedTextView = (TextView) itemView.findViewById(R.id.completion_status_text_view);
 
         }
 
