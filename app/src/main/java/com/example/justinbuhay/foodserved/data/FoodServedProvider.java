@@ -99,11 +99,46 @@ public class FoodServedProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+
+        int result = sUriMatcher.match(uri);
+        int returnInt;
+        SQLiteDatabase database = mDBHelper.getWritableDatabase();
+
+        switch (result) {
+
+            case FOODS:
+                returnInt = database.delete(FoodContract.FoodEntry.TABLE_NAME, null, null);
+                break;
+            case FOODS_ID:
+                String where = FoodContract.FoodEntry._ID + "=?";
+                String[] theId = new String[]{uri.getPath()};
+                returnInt = database.delete(FoodContract.FoodEntry.TABLE_NAME, where, theId);
+                break;
+            default:
+                throw new IllegalArgumentException("Delete failure on Uri:" + uri);
+
+        }
+
+        getContext().getContentResolver().notifyChange(FoodContract.FoodEntry.CONTENT_URI, null);
+        return returnInt;
+
+
     }
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
+
+        SQLiteDatabase database = mDBHelper.getWritableDatabase();
+        int result = sUriMatcher.match(uri);
+        switch (result) {
+
+            case FOODS_ID:
+                String where = FoodContract.FoodEntry._ID + "=?";
+                database.update(FoodContract.FoodEntry.TABLE_NAME, contentValues, where, strings);
+
+
+        }
+
         return 0;
     }
 }

@@ -10,6 +10,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.example.justinbuhay.foodserved.data.FoodContract;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     private RecyclerView mRecyclerView;
     private FoodServedAdapter mAdapter;
     private FloatingActionButton mFAB;
+    private Cursor mCursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +53,46 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
+        /*
+        final ImageButton mImageButton = (ImageButton) findViewById(R.id.button_check);
+
+        mImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ContentValues values = new ContentValues();
+                values.put("CHECK_BOX", true);
+                getContentResolver().update(Uri.parse(FoodContract.FoodEntry.CONTENT_URI + "/" + mCursor.getPosition()), values, null, new String[]{Integer.toString(mCursor.getPosition())});
+            }
+        });
+
+        */
+
         // Initialize LoaderManager
         getSupportLoaderManager().initLoader(1, null, this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.main_activity_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.delete_all_item:
+                deleteAllItems();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void deleteAllItems() {
+        getContentResolver().delete(FoodContract.FoodEntry.CONTENT_URI, null, null);
     }
 
     /*
@@ -78,7 +119,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        mAdapter.swapCursor(data);
+        mCursor = data;
+        mAdapter.swapCursor(mCursor);
 
         mRecyclerView.setAdapter(mAdapter);
 
@@ -87,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+        mCursor.close();
 
     }
 }

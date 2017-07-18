@@ -6,6 +6,7 @@
     <string name="delivered">Delivered</string>
     <string name="food_ordered">Food Ordered</string>
     <string name="num">Table \#</string>
+    <string name="delete_all">Delete all</string>
 
     <!-- Delete Later -->
     <string name="food_title_example">Pizza</string>
