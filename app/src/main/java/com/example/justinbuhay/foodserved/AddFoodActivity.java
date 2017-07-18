@@ -63,13 +63,23 @@ public class AddFoodActivity extends AppCompatActivity {
 
     private void addFood() {
 
+        int tableNumber;
         String foodTitle = mFoodTitleEditText.getText().toString();
-        Log.i(LOG_TAG, "foodTitle: " + foodTitle);
 
-        int tableNumber = Integer.parseInt(mTableNumberEditText.getText().toString());
-        Log.i(LOG_TAG, "tableNumber: " + tableNumber);
+        if((!foodTitle.equals("")) || (foodTitle != null)){
+            foodTitle = mFoodTitleEditText.getText().toString();
+            Log.i(LOG_TAG, "foodTitle: " + foodTitle);
+        } else{
+            return;
+        }
 
-        if ((!foodTitle.equals("")) || (foodTitle != null) || (!(tableNumber < 0))) {
+        if(!(mTableNumberEditText.getText().toString().equals(""))){
+            tableNumber = Integer.parseInt(mTableNumberEditText.getText().toString());
+            Log.i(LOG_TAG, "tableNumber: " + tableNumber);
+        } else{
+            return;
+        }
+
 
             Log.i(LOG_TAG, "FoodEntry CONTENT_URI = " + FoodContract.FoodEntry.CONTENT_URI);
 
@@ -81,9 +91,6 @@ public class AddFoodActivity extends AppCompatActivity {
             positionCreated = (int) ContentUris.parseId(getnewUri);
 
 
-        } else {
-            throw new NullPointerException("Empty parameters within the editTexts");
-        }
 
     }
 
