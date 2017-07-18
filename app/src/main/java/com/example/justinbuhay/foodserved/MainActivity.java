@@ -1,34 +1,38 @@
 package com.example.justinbuhay.foodserved;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.justinbuhay.foodserved.data.FoodContract;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final int ADD_FOOD_REQUEST_CODE = 4;
     private RecyclerView mRecyclerView;
     private FoodServedAdapter mAdapter;
     private FloatingActionButton mFAB;
     private Cursor mCursor;
+    // private int mCurrentPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mCursor = getContentResolver().query(FoodContract.FoodEntry.CONTENT_URI, null, null, null, null);
+        Toast.makeText(this, "OnCreate called", Toast.LENGTH_SHORT).show();
 
-        if (mCursor.moveToFirst())
-            Log.i(MainActivity.class.getSimpleName(), mCursor.getString(mCursor.getColumnIndex(FoodContract.FoodEntry.COLUMNS_FOOD_TITLE)));
+        mCursor = getContentResolver().query(FoodContract.FoodEntry.CONTENT_URI, null, null, null, null);
 
         // Initializes the  adapter with the current query cursor;
         mAdapter = new FoodServedAdapter(this, mCursor);
@@ -56,12 +60,53 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, ADD_FOOD_REQUEST_CODE);
             }
         });
+
+        getSupportLoaderManager().initLoader(1, null, this);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case ADD_FOOD_REQUEST_CODE:
+                    updateRecyclerView();
+                    break;
+            }
+        }
+
+    }
+
+    // Updates RecyclerView for now...
+    public void updateRecyclerView() {
+        mCursor = getContentResolver().query(FoodContract.FoodEntry.CONTENT_URI, null, null, null, null);
+        mAdapter = new FoodServedAdapter(this, mCursor);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
+    }
 
-        mAdapter.notifyDataSetChanged();
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(this, FoodContract.FoodEntry.CONTENT_URI, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        mCursor = data;
+        mAdapter = new FoodServedAdapter(this, mCursor);
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+        mCursor.close();
+
     }
 }

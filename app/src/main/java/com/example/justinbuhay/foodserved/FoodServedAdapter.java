@@ -3,7 +3,6 @@ package com.example.justinbuhay.foodserved;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,11 @@ public class FoodServedAdapter extends RecyclerView.Adapter<FoodServedAdapter.Fo
     public FoodServedAdapter(Context mContext, Cursor mCursor) {
         this.mContext = mContext;
         this.mCursor = mCursor;
+    }
+
+    public void swapCursor(Cursor newCursor) {
+        mCursor = newCursor;
+
     }
 
 
@@ -69,7 +73,7 @@ public class FoodServedAdapter extends RecyclerView.Adapter<FoodServedAdapter.Fo
         public void setData(Cursor c) {
             FoodDescription currentFoodDescription = new FoodDescription(c.getString(c.getColumnIndex(FoodContract.FoodEntry.COLUMNS_FOOD_TITLE)), c.getInt(c.getColumnIndex(FoodContract.FoodEntry.COLUMNS_TABLE_NUMBER)), c.getInt(c.getColumnIndex(FoodContract.FoodEntry.COLUMNS_SERVED_VERIFICATION)));
 
-            Log.i("FoodServedAdapter", "Set current food title: " + currentFoodDescription.getFoodTitle());
+            // Log.i("FoodServedAdapter", "Set current food title: " + currentFoodDescription.getFoodTitle());
 
             foodTitleTextView.setText(currentFoodDescription.getFoodTitle());
             tableNumberTextView.setText(Integer.toString(currentFoodDescription.getTableNumber()));
