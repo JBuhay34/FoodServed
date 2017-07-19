@@ -18,7 +18,7 @@ public class FoodDBHelper extends SQLiteOpenHelper {
             + FoodContract.FoodEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,  "
             + FoodContract.FoodEntry.COLUMNS_FOOD_TITLE + " TEXT NOT NULL, "
             + FoodContract.FoodEntry.COLUMNS_TABLE_NUMBER + " INTEGER NOT NULL, "
-            + FoodContract.FoodEntry.COLUMNS_SERVED_VERIFICATION + " INTEGER DEFAULT 0);";
+            + FoodContract.FoodEntry.COLUMNS_SERVED_VERIFICATION + " INTEGER DEFAULT 1);";
 
     private static final String DELETE_TABLE = "DROP TABLE IF EXISTS " + FoodContract.FoodEntry.TABLE_NAME;
 

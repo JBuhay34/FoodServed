@@ -1,5 +1,6 @@
 package com.example.justinbuhay.foodserved;
 
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -30,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         // Initializes the  adapter with the current query cursor;
-        mAdapter = new FoodServedAdapter(this, null);
+        mAdapter = new FoodServedAdapter(this, null, getContentResolver());
 
         // Finds the RecyclerView's ID.
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
@@ -52,20 +53,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
-
-        /*
-        final ImageButton mImageButton = (ImageButton) findViewById(R.id.button_check);
-
-        mImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ContentValues values = new ContentValues();
-                values.put("CHECK_BOX", true);
-                getContentResolver().update(Uri.parse(FoodContract.FoodEntry.CONTENT_URI + "/" + mCursor.getPosition()), values, null, new String[]{Integer.toString(mCursor.getPosition())});
-            }
-        });
-
-        */
 
         // Initialize LoaderManager
         getSupportLoaderManager().initLoader(1, null, this);

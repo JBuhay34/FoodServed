@@ -1,6 +1,7 @@
 package com.example.justinbuhay.foodserved.data;
 
 import android.content.ContentProvider;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
@@ -129,16 +130,23 @@ public class FoodServedProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
 
         SQLiteDatabase database = mDBHelper.getWritableDatabase();
+        int rowsUpdated;
         int result = sUriMatcher.match(uri);
         switch (result) {
 
             case FOODS_ID:
+                Log.i("FoodServedProvider: ", "correct update called" + String.valueOf(ContentUris.parseId(uri)));
                 String where = FoodContract.FoodEntry._ID + "=?";
-                database.update(FoodContract.FoodEntry.TABLE_NAME, contentValues, where, strings);
 
+                strings = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsUpdated = database.update(FoodContract.FoodEntry.TABLE_NAME, contentValues, where, strings);
+                break;
+            default:
+                return 0;
 
         }
+        getContext().getContentResolver().notifyChange(FoodContract.FoodEntry.CONTENT_URI, null);
+        return rowsUpdated;
 
-        return 0;
     }
 }
